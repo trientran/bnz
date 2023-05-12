@@ -1,0 +1,53 @@
+// Define repositories for the plugin management block
+pluginManagement {
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+    }
+}
+
+// Define repositories and set the mode for dependency resolution management block
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
+// Set the name for the root project and include all the subprojects
+rootProject.name = "BNZ"
+include ':bom'
+include ':strings'
+include ':app'
+
+include ':shared:mobile:public'
+include ':shared:mobile:impl'
+
+include ':shared:view:public'
+
+include ':shared:core:public'
+include ':shared:core:impl'
+include ':shared:core:fake'
+include ':shared:core:testing'
+
+include ':shared:view-model:public'
+include ':shared:view-model:testing'
+
+include ':shared:startup:public'
+include ':shared:startup:impl'
+
+include ':shared:logging:public'
+include ':shared:logging:impl'
+
+include ':shared:compose:public'
+include ':shared:compose:impl'
+include ':shared:compose:fake'
+include ':shared:compose:testing'
+
+include ':shared:images:public'
+
+include ':shared:schools:public'
+include ':shared:schools:impl'
+include ':shared:schools:fake'

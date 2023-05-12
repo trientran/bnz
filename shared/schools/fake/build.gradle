@@ -1,0 +1,10 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.schools.fake"
+
+dependencies {
+    api(project(":shared:schools:public"))
+    implementation(project(":shared:core:testing"))
+}

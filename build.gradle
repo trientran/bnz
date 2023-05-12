@@ -1,0 +1,11 @@
+buildscript {
+    // Activates dependency locking for this build.
+    configurations.classpath {
+        resolutionStrategy.activateDependencyLocking()
+    }
+}
+
+// Task to resolve all dependencies.
+task resolveAllDependencies {
+    dependsOn getTasksByName("dependencies", true)
+}

@@ -1,0 +1,185 @@
+/*
+ * Copyright (c)2022 The original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id("org.jetbrains.kotlin.android") // Enables the Kotlin Android Extensions for this project
+    id("org.jetbrains.kotlin.kapt") // Enables Kotlin Annotation Processing Tool for this project
+    id("com.google.dagger.hilt.android")
+    // Enables Hilt dependency injection framework for this project
+}
+
+android {
+    compileSdkVersion 33 // Sets the version of the Android SDK that will be used for compilation
+    defaultConfig {
+        minSdkVersion 26 // Sets the minimum version of the Android SDK required for the app to run
+        targetSdkVersion 33 // Sets the version of the Android SDK that the app targets
+        vectorDrawables {
+            useSupportLibrary true
+            // Enables support for Vector Drawable graphics on pre-Lollipop devices
+        }
+    }
+    buildFeatures {
+        buildConfig false // Disables automatic generation of BuildConfig class
+        aidl false // Disables AIDL compilation
+        renderScript false // Disables RenderScript compilation
+        resValues false // Disables automatic generation of resource values
+        shaders false // Disables OpenGL shaders compilation
+    }
+    buildTypes {
+        // Non-release variants may match with a release library variant,
+        // as most library modules only supply a release variant.
+        debug {
+            matchingFallbacks = ["release"] // Specifies fallbacks for missing build types, if any
+        }
+        internal {
+            matchingFallbacks = ["release"]
+        }
+        release {
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8 // Specifies the version of Java source code to be generated
+        targetCompatibility 1.8 // Specifies the version of the Java bytecode to be generated
+        coreLibraryDesugaringEnabled true
+        // Enables desugaring of Java 8+ APIs for use on older Android versions
+    }
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            // Specifies whether the default values should be returned for missing arguments
+            includeAndroidResources = true
+            // Specifies whether Android resources should be included in tests
+            execution "ANDROIDX_TEST_ORCHESTRATOR" // Specifies the test runner to use
+            all {
+                maxHeapSize = "512m" // Specifies the maximum heap size for the JVM
+                jvmArgs "-noverify" // Specifies additional JVM arguments to pass to the test runner
+                filter {
+                    def excludeTests = rootProject.findProperty("excludeTests")
+                    if (excludeTests != null) {
+                        excludeTestsMatching excludeTests
+                        // Specifies a regular expression pattern for excluding tests
+                    }
+                    def includeTests = rootProject.findProperty("includeTests")
+                    if (includeTests != null) {
+                        includeTestsMatching includeTests
+                        // Specifies a regular expression pattern for including tests
+                    }
+                    failOnNoMatchingTests = false
+                    // Specifies whether to fail the build if no tests are matched
+                }
+                useJUnit {
+                    def includeTestCategories = rootProject.findProperty("includeTestCategories")
+                    def excludeTestCategories = rootProject.findProperty("excludeTestCategories")
+                    if (includeTestCategories != null) {
+                        includeCategories includeTestCategories
+                        // Specifies the categories of tests to include
+                    }
+                    if (excludeTestCategories != null) {
+                        excludeCategories excludeTestCategories
+                        // Specifies the categories of tests to exclude
+                    }
+                }
+            }
+        }
+    }
+    kotlinOptions {
+        // Sets all warnings as errors when running in continuous integration environment
+        allWarningsAsErrors = System.getenv().containsKey("CI")
+        // Sets the target JVM version to 1.8
+        jvmTarget = "1.8"
+        freeCompilerArgs += [
+                // Enables progressive mode for the Kotlin compiler
+                "-progressive",
+                // Enables experimental APIs for the kotlinx.coroutines.Flow API
+                "-opt-in=kotlinx.coroutines.FlowPreview",
+                // Enables experimental APIs for the kotlin.time package
+                "-opt-in=kotlin.time.ExperimentalTime",
+                // Enables experimental APIs for the kotlinx.coroutines package
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                // Enables experimental APIs for the kotlin.stdlib package
+                "-opt-in=kotlin.ExperimentalStdlibApi",
+                // Enables experimental APIs for the kotlin.contracts package
+                "-opt-in=kotlin.contracts.ExperimentalContracts",
+        ]
+    }
+    kapt {
+        // Corrects error types when processing annotations during Kapt compilation
+        correctErrorTypes true
+    }
+    hilt {
+        // Enables aggregating task during Hilt processing to generate combined sources
+        enableAggregatingTask = true
+    }
+}
+
+dependencies {
+    // Import BOM
+    compileOnly(platform(project(":bom")))
+    debugImplementation(platform(project(":bom")))
+    releaseImplementation(platform(project(":bom")))
+    testImplementation(platform(project(":bom")))
+    api(platform(project(":bom")))
+    kapt(platform(project(":bom")))
+
+    // Desugaring provides the necessary classes to runcertain Java 8 features on older Android versions
+    // that do not have those features natively. This is commonly known as desugaring.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android")
+    kapt("com.google.dagger:hilt-android-compiler")
+    kaptTest("com.google.dagger:hilt-android-compiler")
+    kapt("androidx.hilt:hilt-compiler")
+    kaptTest("androidx.hilt:hilt-compiler")
+    testImplementation("com.google.dagger:hilt-android-testing")
+
+    // Testing
+    testImplementation("androidx.test:core-ktx")
+    testImplementation("androidx.test:rules")
+    testImplementation("androidx.test:runner")
+    testImplementation("androidx.test.ext:junit-ktx")
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}
+
+// Disable Java compiler warnings
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-Xlint:-unchecked"
+    options.compilerArgs << "-Xlint:-deprecation"
+}
+
+// Composable metrics
+// https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        if (project.findProperty("composeCompilerReports") == "true") {
+            freeCompilerArgs += [
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            project.buildDir.absolutePath + "/compose_compiler"
+            ]
+        }
+        if (project.findProperty("composeCompilerMetrics") == "true") {
+            freeCompilerArgs += [
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            project.buildDir.absolutePath + "/compose_compiler"
+            ]
+        }
+    }
+}

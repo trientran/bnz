@@ -1,0 +1,140 @@
+/*
+ * Copyright (c)2022 The various authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion '0.8.7' // configure Jacoco version
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    // include classes with no source location information in coverage report
+    jacoco.excludes = ['jdk.internal.*'] // exclude internal JDK classes from coverage report
+}
+
+project.afterEvaluate {
+    def variants = ["release"] // set the build variants to report coverage for
+
+    tasks.create(name: "allReleaseCoverage", type: JacocoReport) {
+        // create a task to generate overall coverage report
+
+        group = "Reporting" // set the task group
+        description = "Generate overall Jacoco coverage report." // set the task description
+
+        reports {
+            html.enabled(true) // enable HTML report generation
+            xml.enabled(true) // enable XML report generation
+        }
+
+        def excludes = [ // specify classes to exclude from coverage report
+                         // Android
+                         '**/R.class',
+                         '**/R$*.class',
+                         '**/BuildConfig.*',
+                         '**/Manifest*.*',
+                         // Data binding
+                         'android/databinding/**/*.class',
+                         '**/android/databinding/*Binding.class',
+                         '**/android/databinding/*',
+                         '**/androidx/databinding/*',
+                         '**/BR.*',
+                         '**/*MapperImpl*.*',
+                         '**/*$ViewInjector*.*',
+                         '**/*$ViewBinder*.*',
+                         '**/BuildConfig.*',
+                         '**/Manifest*.*',
+                         '**/*$Lambda$*.*',
+                         '**/*Companion*.*',
+                         '**/*Module*.*',
+                         '**/*Dagger*.*',
+                         '**/*Hilt*.*',
+                         '**/*MembersInjector*.*',
+                         '**/*_MembersInjector.class',
+                         '**/*_Factory*.*',
+                         '**/*_Provide*Factory*.*',
+                         // Sealed and data classes
+                         '**/*$Result.*',
+                         '**/*$Result$*.*',
+                         // Moshi
+                         '**/*JsonAdapter*',
+                         // View Binding
+                         '**/*Binding*',
+                         // Nav
+                         '**/*Directions*',
+                         // Dagger/Hilt
+                         '**/*_*Factory*',
+                         '**/*_BindValueModule.*',
+                         '**/*_ComponentDataHolder*',
+                         '**/*_GeneratedInjector*',
+                         '**/*_HiltComponents*',
+                         '**/*_HiltModule*',
+                         '**/*_MembersInjector*',
+                         '**/Hilt_*Application*',
+                         '**/Hilt_*Dialog*',
+                         '**/Hilt_*Fragment*',
+                         '**/Hilt_*Layout*',
+                         '**/Hilt_*Receiver*',
+                         '**/Hilt_*Service*',
+                         '**/Hilt_*View*',
+                         // KotlinX Serialization
+                         '**/*$$serializer*',
+        ]
+
+        def jClasses = subprojects.collect { proj -> // collect Java classes directories for all subprojects and variants
+            variants.collect { variant ->
+                "${proj.buildDir}/intermediates/javac/$variant/classes"
+            }
+        }.flatten()
+        def kClasses = subprojects.collect { proj -> // collect Kotlin classes directories for all subprojects and variants
+            variants.collect { variant ->
+                "${proj.buildDir}/tmp/kotlin-classes/$variant"
+            }
+        }.flatten()
+
+        def javaClasses = jClasses.collect { path -> // collect Java classes for all subprojects and variants
+            fileTree(dir: path, excludes: excludes)
+        }
+        def kotlinClasses = kClasses.collect { path -> // collect Kotlin classes for all subprojects and variants
+            fileTree(dir: path, excludes: excludes)
+        }
+
+        // Combine the class directories for Java and Kotlin classes
+        classDirectories.from = files([javaClasses, kotlinClasses])
+
+        // Collect all source directories for the subprojects and variants
+        // and add them to the sourceDirectories
+        def sources = subprojects.collect { proj ->
+            variants.collect { variant ->
+                ["${proj.projectDir}/src/main/java", "${proj.projectDir}/src/main/kotlin",
+                 "${proj.projectDir}/src/$variant/java", "${proj.projectDir}/src/$variant/kotlin"]
+            }.flatten()
+        }.flatten()
+        sourceDirectories.from = files(sources)
+
+        // Collect all test execution files for the subprojects and variants
+        // and add them to the executionData
+        def executions = subprojects.collect { proj ->
+            variants.collect { variant ->
+                def path = "${proj.buildDir}/jacoco/test${variant.capitalize()}UnitTest.exec"
+                if ((new File(path)).exists()) path else null
+            }
+        }.flatten()
+        executions.removeAll([null])
+
+        executionData.from = files(executions)
+    }
+}

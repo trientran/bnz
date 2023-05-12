@@ -1,0 +1,16 @@
+plugins {
+    id("dev.mrtroy.library")
+    id("dev.mrtroy.moshi")
+}
+
+android.namespace = "dev.mrtroy.schools.impl"
+
+dependencies {
+    implementation(project(":shared:schools:public"))
+    implementation(project(":shared:core:public"))
+    implementation("com.squareup.retrofit2:retrofit")
+    implementation("com.squareup.retrofit2:converter-moshi")
+    testImplementation(project(":shared:core:fake"))
+    testImplementation(project(":shared:core:testing"))
+    testImplementation("com.squareup.okhttp3:mockwebserver")
+}

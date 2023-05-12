@@ -1,0 +1,9 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.startup.impl"
+
+dependencies {
+    api(project(":shared:startup:public"))
+}

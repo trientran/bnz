@@ -1,0 +1,16 @@
+plugins {
+    id("groovy-gradle-plugin")
+}
+
+dependencies {
+    implementation("com.android.tools.build:gradle:7.4.2")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${libs.versions.kotlin.get()}")
+    implementation("org.jetbrains.kotlin:kotlin-serialization:${libs.versions.kotlin.get()}")
+    implementation("androidx.navigation:navigation-safe-args-gradle-plugin:${libs.versions.androidx.navigation.get()}")
+    implementation("com.google.dagger:hilt-android-gradle-plugin:${libs.versions.hilt.get()}")
+    implementation("com.google.devtools.ksp:symbol-processing-gradle-plugin:${libs.versions.ksp.get()}")
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}

@@ -1,0 +1,49 @@
+// Plugins section:
+// Apply the following plugins:
+// - dev.mrtroy.library: A custom Gradle plugin to configure some common library configurations.
+// - dev.mrtroy.compose: A custom Gradle plugin to apply the common configuration needed for Jetpack Compose.
+plugins {
+    id("dev.mrtroy.library")
+    id("dev.mrtroy.compose")
+}
+
+// Android namespace section:
+// Set the namespace for the Android app, which is used to differentiate between multiple apps or modules 
+// within the same project, in this case "dev.mrtroy.compose.pub" (package name).
+android.namespace = "dev.mrtroy.compose.pub"
+
+// Dependencies section:
+// Declare the dependencies for the project, which include:
+// - shared:core:public: A shared module that contains core functionality to be used across multiple modules.
+// - shared:view:public: A shared module that contains xml based UI components and fragment to be used across multiple modules.
+// - shared:images:public: A shared module that contains shared images to be used across multiple modules.
+// - strings: A module that contains string resources used in the app.
+// - androidx.activity:activity-compose: Jetpack Compose support for Android activities.
+// - androidx.lifecycle:lifecycle-runtime-compose: Jetpack Compose support for Android lifecycle.
+// - androidx.compose.ui:ui: Jetpack Compose UI library.
+// - androidx.compose.ui:ui-tooling: Jetpack Compose UI tooling library.
+// - androidx.compose.material3:material3: Jetpack Compose material design components.
+// - androidx.ui:ui-framework: Jetpack Compose framework library.
+// - androidx.constraintlayout:constraintlayout-compose: Jetpack Compose support for ConstraintLayout.
+// - io.coil-kt:coil-compose: Jetpack Compose support for image loading with Coil.
+// - org.jetbrains.kotlinx:kotlinx-collections-immutable: Immutable collections library.
+// - com.google.android.material:material: Material Design components.
+// - shared:core:testing: A shared module that contains testing functionality to be used across multiple modules.
+
+dependencies {
+    implementation(project(":shared:core:public"))
+    implementation(project(":shared:view:public"))
+    api(project(":shared:images:public"))
+    api(project(":strings"))
+    api("androidx.activity:activity-compose")
+    api("androidx.lifecycle:lifecycle-runtime-compose")
+    api("androidx.compose.ui:ui")
+    api("androidx.compose.ui:ui-tooling")
+    api("androidx.compose.material3:material3")
+    api("androidx.ui:ui-framework")
+    api("androidx.constraintlayout:constraintlayout-compose")
+    api("io.coil-kt:coil-compose")
+    api("org.jetbrains.kotlinx:kotlinx-collections-immutable")
+    implementation("com.google.android.material:material")
+    testImplementation(project(":shared:core:testing"))
+}

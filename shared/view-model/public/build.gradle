@@ -1,0 +1,16 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.viewmodel.pub"
+
+dependencies {
+    implementation(project(":shared:core:public"))
+    implementation(project(":shared:logging:public"))
+    api("androidx.lifecycle:lifecycle-common-java8")
+    api("androidx.lifecycle:lifecycle-runtime-ktx")
+    api("androidx.activity:activity-ktx")
+    api("androidx.fragment:fragment-ktx")
+    testImplementation(project(":shared:core:fake"))
+    testImplementation(project(":shared:core:testing"))
+}

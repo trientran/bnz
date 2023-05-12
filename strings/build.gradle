@@ -1,0 +1,5 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.strings"

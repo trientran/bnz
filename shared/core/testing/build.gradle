@@ -1,0 +1,20 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.core.testing"
+
+dependencies {
+    api(project(":shared:core:public"))
+    api("com.squareup.okhttp3:okhttp")
+    api("io.mockk:mockk")
+    api("org.robolectric:robolectric")
+    api("junit:junit")
+    api("androidx.test:core-ktx")
+    api("androidx.test.ext:junit-ktx")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-debug")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+    api("org.jetbrains.kotlin:kotlin-reflect")
+    api("io.kotest:kotest-assertions-core")
+    api("io.kotest:kotest-assertions-json")
+}

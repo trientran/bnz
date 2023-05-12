@@ -1,0 +1,41 @@
+plugins {
+    id 'dev.mrtroy.app'
+}
+
+android.buildFeatures.buildConfig true
+
+android {
+    namespace 'dev.mrtroy.app'
+
+    defaultConfig {
+        applicationId "dev.mrtroy.mlkit"
+        testApplicationId "dev.mrtroy.mlkit.test"
+    }
+}
+
+kapt {
+    arguments {
+        arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
+    }
+}
+
+// Usually, only impl modules are imported here because we want to use the real implementations
+// provided by Hilt, not the fake ones.
+dependencies {
+    implementation(project(":strings"))
+    implementation(project(":shared:startup:impl"))
+    implementation(project(":shared:mobile:impl"))
+    implementation(project(":shared:core:impl"))
+    implementation(project(":shared:logging:impl"))
+    implementation(project(":shared:view:public"))
+    implementation(project(":shared:schools:impl"))
+
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
+            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
+}

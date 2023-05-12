@@ -1,0 +1,16 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.view.pub"
+
+android.buildFeatures.viewBinding true
+
+dependencies {
+    api(project(":shared:core:public"))
+    api("com.google.android.material:material")
+    api("androidx.constraintlayout:constraintlayout")
+    api("androidx.navigation:navigation-ui-ktx")
+    api("androidx.navigation:navigation-fragment-ktx")
+    api(project(":strings"))
+}

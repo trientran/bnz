@@ -1,0 +1,18 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.logging.impl"
+
+kapt {
+    arguments {
+        arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
+    }
+}
+
+dependencies {
+    implementation(project(":shared:logging:public"))
+    implementation(project(":shared:core:public"))
+    implementation(project(":shared:startup:public"))
+    api("com.jakewharton.timber:timber")
+}

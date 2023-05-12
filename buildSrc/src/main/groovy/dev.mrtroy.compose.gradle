@@ -1,0 +1,41 @@
+/*
+ * Copyright (c)2022 The original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+plugins {
+    id("org.jetbrains.kotlin.android")
+}
+
+// Enable Compose support in the Android build system
+android.buildFeatures.compose true
+
+// Set the version of the Compose Kotlin Compiler extension to use
+android.composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+
+// Add experimental compiler options for Compose APIs that are not yet stable
+android.kotlinOptions.freeCompilerArgs += [
+        "-opt-in=androidx.compose.ui.test.ExperimentalTestApi",
+        "-opt-in=androidx.compose.ui.text.ExperimentalTextApi",
+        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+]
+
+// Declare dependencies on Compose libraries
+dependencies {
+    implementation("androidx.compose.ui:ui")
+    // Make experimental annotations available at compile time to prevent compilation error
+    compileOnly("androidx.compose.ui:ui-test") { transitive = false }
+    compileOnly("androidx.compose.material3:material3") { transitive = false }
+    compileOnly("androidx.compose.foundation:foundation") { transitive = false }
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">SchoolApp</string>
+    <string name="empty_error_message">No school found. Please retry later!</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="connectivity_error_message">There is an issue with internet connection. Please try again later!</string>
+    <string name="a_technical_issue_please_try_again">A technical issue occurred. Please try again later or contact us!</string>
+
+</resources>

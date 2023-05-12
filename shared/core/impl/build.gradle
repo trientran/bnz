@@ -1,0 +1,11 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.core.impl"
+
+dependencies {
+    implementation(project(":shared:core:public"))
+    implementation(project(":shared:startup:public"))
+    implementation("androidx.lifecycle:lifecycle-process")
+}

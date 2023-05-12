@@ -1,0 +1,9 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.logging.pub"
+
+dependencies {
+    implementation("com.jakewharton.timber:timber")
+}

@@ -1,0 +1,24 @@
+plugins {
+    id("dev.mrtroy.library")
+    id("dev.mrtroy.compose")
+    id("dev.mrtroy.moshi")
+    id("androidx.navigation.safeargs.kotlin")
+}
+
+android.namespace = "dev.mrtroy.mobile.impl"
+
+android.buildFeatures.viewBinding true
+
+dependencies {
+    implementation(project(":shared:mobile:public"))
+    implementation(project(":shared:schools:public"))
+    implementation(project(":shared:view:public"))
+    implementation(project(":shared:view-model:public"))
+    implementation(project(":shared:compose:public"))
+    implementation(project(":shared:core:public"))
+    testImplementation(project(":shared:compose:testing"))
+    testImplementation(project(":shared:compose:fake"))
+    testImplementation(project(":shared:schools:fake"))
+    testImplementation(project(":shared:core:testing"))
+    testImplementation(project(":shared:core:fake"))
+}

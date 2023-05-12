@@ -1,0 +1,10 @@
+plugins {
+    id("dev.mrtroy.library")
+    id("dev.mrtroy.compose")
+}
+
+android.namespace = "dev.mrtroy.compose.impl"
+
+dependencies {
+    api(project(":shared:compose:public"))
+}

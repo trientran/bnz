@@ -1,0 +1,9 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.schools.pub"
+
+dependencies {
+    api("com.squareup.okhttp3:okhttp")
+}

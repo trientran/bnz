@@ -1,0 +1,18 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.core.pub"
+
+dependencies {
+    api("androidx.core:core-ktx")
+    api("androidx.annotation:annotation")
+    api("androidx.activity:activity-ktx")
+    api("androidx.fragment:fragment-ktx")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android")
+    api("com.squareup.okhttp3:okhttp")
+    api("org.jetbrains.kotlinx:kotlinx-collections-immutable")
+    api(project(":shared:logging:public"))
+}

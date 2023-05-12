@@ -1,0 +1,9 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.mobile.pub"
+
+dependencies {
+    implementation(project(":shared:view:public"))
+}

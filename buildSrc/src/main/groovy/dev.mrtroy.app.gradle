@@ -1,0 +1,48 @@
+/*
+ * Copyright (c)2022 The original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id("com.android.application")
+    id("dev.mrtroy.common")
+}
+
+// This Gradle script is used for configuring an Android application's build settings. It specifies
+// the default configuration for the app, including the test instrumentation runner arguments, the
+// version code, and the version name. It also specifies the ProGuard files to be used for code
+// obfuscation and optimization.
+// The packagingOptions block is used to exclude certain files or folders from the app's APK package.
+// In this case, it excludes the lib/mips/* and lib/armeabi/* folders, which contain native libraries
+// for specific processor architectures.
+// Finally, the script defines a single build type for the app, which is the release build type.
+// The minifyEnabled property is set to true for this build type, which enables code shrinking and
+// obfuscation with ProGuard to reduce the app's size and protect the code from reverse engineering.
+android {
+    defaultConfig {
+        testInstrumentationRunnerArguments clearPackageData: "true"
+        versionCode rootProject.properties["buildNumber"].toInteger()
+        versionName rootProject.properties["versionName"].toString()
+        proguardFiles getDefaultProguardFile("proguard-android.txt"), rootProject.file("proguard-rules.pro")
+    }
+    packagingOptions {
+        exclude "lib/mips/*"
+        exclude "lib/armeabi/*"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+        }
+    }
+}

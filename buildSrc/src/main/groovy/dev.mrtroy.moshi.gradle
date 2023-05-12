@@ -1,0 +1,46 @@
+/*
+ * Copyright (c)2022 The original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// This Gradle script defines plugins and dependencies for a Kotlin Android project.
+
+// Apply the following plugins:
+// - org.jetbrains.kotlin.android: for building Android apps with Kotlin
+// - org.jetbrains.kotlin.kapt: for annotation processing with Kotlin
+// - com.google.devtools.ksp: for generating Kotlin code
+plugins {
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
+    id("com.google.devtools.ksp")
+}
+
+// Define dependencies for KSP code generation:
+// - com.squareup.moshi:moshi-kotlin-codegen: codegen for Moshi
+// - dev.zacsweers.moshix:moshi-sealed-codegen: codegen for Moshi sealed classes
+// - bom: version management for KSP
+dependencies {
+    ksp("com.squareup.moshi:moshi-kotlin-codegen")
+    kspTest("com.squareup.moshi:moshi-kotlin-codegen")
+    ksp("dev.zacsweers.moshix:moshi-sealed-codegen")
+    kspTest("dev.zacsweers.moshix:moshi-sealed-codegen")
+    ksp(platform(project(":bom")))
+    kspTest(platform(project(":bom")))
+
+    // Define runtime dependencies:
+    // - com.squareup.moshi:moshi: runtime library for Moshi
+    // - dev.zacsweers.moshix:moshi-sealed-runtime: runtime library for Moshi sealed classes
+    implementation("com.squareup.moshi:moshi")
+    implementation("dev.zacsweers.moshix:moshi-sealed-runtime")
+}

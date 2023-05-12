@@ -1,0 +1,11 @@
+plugins {
+    id("dev.mrtroy.library")
+}
+
+android.namespace = "dev.mrtroy.core.fake"
+
+dependencies {
+    api(project(":shared:core:public"))
+    api("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(project(":shared:core:testing"))
+}

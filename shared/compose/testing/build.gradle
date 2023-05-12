@@ -1,0 +1,14 @@
+plugins {
+    id("dev.mrtroy.library")
+    id("dev.mrtroy.compose")
+}
+
+android.namespace = "dev.mrtroy.compose.testing"
+
+dependencies {
+    api(project(":shared:compose:public"))
+    api("androidx.compose.ui:ui-test")
+    api("androidx.compose.ui:ui-test-junit4")
+    api("androidx.compose.ui:ui-test-manifest")
+    implementation("androidx.test.espresso:espresso-core")
+}
